@@ -1,0 +1,331 @@
+PARSER_BEGIN(main)
+
+import java.util.Vector;
+import java.util.Iterator;
+import java.io.PrintWriter;
+
+class Registro {
+
+  public int tipo_j;
+  public String id_j;
+
+  public Registro()
+  {
+     tipo_j = -1;
+     id_j = "";
+  }  
+
+}
+
+public class main {
+
+  public static Vector tabla = new Vector();  
+
+  public static void guardaID(String id_j, int tipo_j)
+  {
+
+     if( buscaID(id_j) == -1)
+     {  
+        Registro r = new Registro();
+        r.tipo_j = tipo_j;
+        r.id_j = id_j;  
+        tabla.add(r);
+     }
+     else
+       System.out.println("La variableJ "+id_j+" ya fue declarada");
+  }
+
+  public static int buscaID(String id_j)
+  {
+      Registro r;
+
+       Iterator<Registro> itr = tabla.iterator();
+        while(itr.hasNext()){
+            r=itr.next();
+            if((r.id_j).equals(id_j))
+              return r.tipo_j;
+        }
+
+      return -1;
+  }
+
+  public static void main(String args[]) throws ParseException {
+    
+    String stringConTodo = "";
+    try {
+      main parser = new main(new java.io.FileentradaJStream(args[0]));
+      stringConTodo = parser.Programa();
+    }
+    catch(java.io.FileNotFoundException e)
+    {
+      System.out.println("El archivo no esta...");
+    }
+
+    try {
+    	PrintWriter writer = new PrintWriter("result.txt", "UTF-8");
+	writer.println(stringConTodo);
+        writer.close();
+    } catch (Exception e) {}
+  }
+
+}
+
+PARSER_END(main)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+
+  < RIGHT: "der" >
+          {  }
+ | < LEFT: "izq" >
+          {  }
+ |  < ENTERO: ["0"-"9"] (["0"-"9"])* >
+          {  }
+ | < ATRAS: "atras" >
+          {  }
+ | < ADELANTE: "avanza" >
+          {  }
+ | < VUELTA: "vuelta" >
+          {  }
+ | < REPETIR: "repetir" >
+          {  }
+ | < REPETICIONES: "repeticiones" >
+          {  }
+ | < DPUNTOS: ":" >
+          {  }
+ | < PA: "(" >
+          {  }
+ | < PC: ")" >
+          {  }
+ | < COMA: "," >
+          {  } 
+ | < THEN: "then" >
+          {  }
+ | < IF: "Si">
+	  {  }
+ | < OPER: (">" | "<" | "=" ) >
+          {  }
+ | < S1: "s1" >
+          {  }
+ | < S2: "s2" >
+          {  }
+ | < S3: "s3" >
+          {  }
+ | < FIN: "Fin" >
+          {  }
+
+
+}
+
+String Programa() :
+{String stringConTodo; String misEstructuras = ""; String structure;}
+{
+  
+  ( structure = estructuraJJJ() {misEstructuras += structure;} )+ <EOF>
+  { 
+	stringConTodo = "inicio code";
+	stringConTodo += misEstructuras;
+	stringConTodo += "\nfin code\n}";
+	return stringConTodo;
+  }
+}
+
+String estructuraJJJ() :
+{String stringConTodo;}
+{
+  stringConTodo = metodoJ() 
+  { 	
+	stringConTodo += "\n";
+  	return stringConTodo;
+  }
+  | stringConTodo = For()
+  {
+		stringConTodo += "\n";
+        return stringConTodo;
+  }
+  | stringConTodo = If() 
+  {
+        stringConTodo += "\n";
+        return stringConTodo;
+  } 
+}
+
+String metodoJ() :
+{String stringConTodo;}
+{
+   stringConTodo = adelanteJ()
+  {
+        return stringConTodo;numero
+  }
+  | stringConTodo = atrasJ()
+  {
+        return stringConTodo;
+  }
+  | stringConTodo = vueltaJ()
+  {
+        return stringConTodo;
+  }
+}
+
+String vueltaJ() : 
+{Token num; String stringConTodo; int l;}
+{
+  <VUELTA> <PA>  num = <ENTERO>  <COMA> l = tipoL() <PC> 
+  { 
+	int num = Integer.parseInt(num.image);
+	if(num >= 0 && 180 >= num) {
+		stringConTodo = "vueltaJ code";
+	}
+	return stringConTodo;
+  }
+}
+
+String adelanteJ() :
+{Token num; String stringConTodo;}
+{
+  <ADELANTE> <PA> num = <ENTERO> <PC>
+  {
+	int num = Integer.parseInt(num.image);
+	stringConTodo = "adelanteCode";
+	if(num > 500) 
+		System.out.println("Warning);
+
+	return stringConTodo;
+  }
+}
+
+String atrasJ() :
+{Token num; String stringConTodo;}
+{
+  <ATRAS> <PA> num = <ENTERO> <PC>
+  { 
+	int num = Integer.parseInt(num.image);
+	stringConTodo = "atarsCode";
+	if(num > 500) 
+                System.out.println("Warning");
+	return stringConTodo;
+  }
+}
+
+int tipoL() :
+{}
+{
+   <RIGHT> { return 1; } 
+ | <LEFT> { return -1; }
+
+}
+
+String If() :
+{String stringConTodo, conditionJ; String misEstructuras = ""; String structure;}
+{
+  <IF> conditionJ = conditionJ() <THEN> ( LOOKAHEAD(2) structure = estructuraJJJ(){ misEstructuras += structure; })+ <FIN>
+  {
+	stringConTodo =  "IfCode";
+	return stringConTodo;
+  }
+}
+
+String conditionJ() :
+{ Token num, op; String var; String stringConTodo;}
+{
+  var = variableJ() op = <OPER> num = <ENTERO>
+  { 
+	int num = Integer.parseInt(num.image);
+ 	if(500 >= num && num >= 30 ) {
+		stringConTodo = var + "_" + op.image + "_" + num * 10; 
+	}
+	return stringConTodo;
+  }
+}
+
+String variableJ() :
+{ Token mivar; }
+{
+  mivar = <S1>
+  { 
+  	return mivar.image;
+  }
+  | mivar = <S2>
+  {
+        return mivar.image;
+  }
+  | mivar = <S3>
+  {
+        return mivar.image;
+  }
+
+}
+
+String For() :
+{String stringConTodo; String estructuraJJ = ""; Token num; String structure;}
+{
+  <REPETIR> num = <ENTERO> <REPETICIONES> <DPUNTOS> ( LOOKAHEAD(2) structure = estructuraJJ() { estructuraJJ += structure;})+ <FIN> 
+  { 
+	int num = Integer.parseInt(num.image);
+	stringConTodo = "for";
+	return stringConTodo;
+  }
+}
+/*
+
+void entradaJ() :
+{  }
+{
+  (declareJ())+ OperationsJ() <EOF>
+  { System.out.println("END"); }
+}
+
+
+
+void declareJ() :
+{ Token t; int tipo_j; }
+{
+    tipo_j = numTipo() t=<ID> <STOP> 
+    {  
+      guardaID(t.image,tipo);
+    }
+}
+
+int numTipo() :
+{ }
+OKAHEAD(2)
+{
+   <INT>   { return 1; }
+ | <FLOAT> { return 2; }
+}
+
+void OperationsJ() :
+{ int x, y; }
+{
+   x = ExpresionJ() <OP> y = ExpresionJ() 
+    { 
+      if( x != 1 || y != 1)
+        System.out.println("imprime"); 
+    }
+}
+
+
+int ExpresionJ() :
+{ Token n; }
+{
+    <NUM>
+    { return 1;}
+ |  <REAL>
+    { return 2;}
+ |  n = <ID>
+    { 
+       int ti = buscaID(n.image);
+       if( ti == -1)
+         System.out.println("expresionJ code");
+       return ti;
+     }
+   
+}*/
