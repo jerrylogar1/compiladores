@@ -1,0 +1,211 @@
+	PARSER_BEGIN(PF)
+	import java.io.PrintWriter;
+	import java.io.FileOutputStream;
+	import java.io.File;
+
+public class PF 
+{
+  public static void main(String args[]) throws ParseException 
+  {
+    try 
+    {
+      PF parser = new PF(new java.io.FileInputStream(args[0]));
+      parser.Input();
+    }
+    catch(java.io.FileNotFoundException e)
+    {
+      System.out.println("El archivo no esta...");
+    }
+  }
+}
+PARSER_END(PF)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+	  < BA : "{" >
+	| < BC : "}" >
+	| < PA : "(" >
+	| < PC : ")" >
+	| < CA : "[" >
+	| < CC : "]" >
+	| < EQUAL : "=" >
+	| < COMA : "," >
+	| < PUNTO : "." >
+	| < DP : ":" >
+	| < PCOMA : ";" >
+	| < GB : "_" >
+	| < CREATE : "create" >
+	| < PAGE : "page" >
+	| < WITH : "with" >
+	| < TABLE : "table" >
+	| < CLASS : "class" >
+	| < HEADERS : "headers" >
+	| < HEADER : "header" >
+	| < FOOTER : "footer" >
+	| < SIDEBAR : "sidebar" >
+	| < NAV : "nav" >
+	| < DIV : "div" >
+	| < ITEMS : "items" >
+	| < AUDIO : "audio" >
+	| < VIDEO : "video" >
+	| < LIST : "list" >
+	| < LINK : "link" >
+	| < PARAGRAPH : "paragraph" >
+	| < TITLE : "title" >
+	| < SUBTITLE : "subtitle" >
+	| < AND : "and" >
+	| < COLUMNS : "columns" >
+	| < ROWS : "rows" >
+	| < STYLE : "style" >
+	| < SMALLBLOCK : "smallBlock" >
+	| < MEDIUMBLOCK : "mediumBlock" >
+	| < LARGEBLOCK : "largeBlock" >
+	| < YES : "yes" >
+	| < NO : "no" >
+	| < SECTION : "section" >
+	| < IMAGE : "image" >
+	| < SOURCE : "source" >
+	| < WIDTH : "width" >
+	| < PX : "px" >
+	| < TIMES : "times" >
+	| < HEIGHT : "height" >
+	| < MOV : "mov" >
+	| < MP4 : "mp4" >
+	| < MP3 : "mp3" >
+	| < WAV : "wav" >
+	| < JPG : "jpg" >
+	| < PNG : "png" >
+	| < IDG : "id" >
+	| < ID : ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
+	| < ENTERO : ["1"-"9"] (["0"-"9"])*>
+	| < REAL : (["0"-"9"])* "." (["0"-"9"])*(["0"-"9"])*  >
+
+}
+void Input():
+{System.out.println("Todo bien");}
+{
+	<CREATE><PAGE><WITH><TITLE><BA>Contenido()<BC><EOF>
+}
+void Contenido():
+{
+System.out.println("Todo bien en Contenido");
+}
+{
+	Content() Tiempo() Contenido()
+}
+void Tiempo():
+{}
+{
+	(<ENTERO><TIMES>| {})
+}
+void Content():
+{
+System.out.println("Todo bien en Contenido");
+}
+{
+	(MediaStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
+	| TextElement() <DP> ManyIDs() <PCOMA>
+	| StructureElementsWithElements() <PCOMA>
+	| FullStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
+	| TopAndBottomStructures() <BA> StAttributes() <BC> <PCOMA>)
+}
+void TextElement():
+{
+	
+}
+{
+	(<PARAGRAPH> | <TITLE> | <SUBTITLE>)
+}
+void StAttributes():
+{
+	
+}
+{
+	(FullStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
+	| MediaStructures() StAttributes()
+	| StructureElementsWithElements() StAttributes()
+	| {})
+}
+void StructureElementsWithElements():
+{}
+{
+	(<TABLE> <WITH> <BA> <PA> ManyAttributesForTable() <PC> <CA> <PA> ManyAttributesForTable() ManyIDs() <CC> <BC>
+	| <LIST> <WITH> <ENTERO> <ITEMS>
+	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> ManyIDs() <CC> <BC>
+	| <NAV> <WITH> <BA> AttributesForBar() <BC>)
+}
+void ManyAttributesForTable():
+{}
+{
+	(AttributesForTable())+ | {}
+}
+void AttributesForTable():
+{}
+{
+	<ENTERO> <COLUMNS> <AND> <ENTERO> <ROWS>
+}
+void AttributesForBar():
+{}
+{
+	<ENTERO> <ITEMS> <WITH> <STYLE> BarStyle()
+}
+void BarStyle():
+{}
+{
+	(<SMALLBLOCK> | <MEDIUMBLOCK> | <LARGEBLOCK>)
+}
+void ManyAttributesTableOpt():
+{}
+{
+	(AttributesTableOpt())*
+}
+void AttributesTableOpt():
+{}
+{
+	<WITH> <HEADERS> (<YES>| <NO>)
+}
+void TopAndBottomStructures():
+{}
+{
+	<HEADER> | <FOOTER>
+}
+void FullStructures():
+{}
+{
+	<DIV> | <SECTION>
+}
+void MediaStructures():
+{}
+{
+	<IMAGE> <BA> ImgAttributes() <BC>
+	| <AUDIO> <BA> AudioAttributes()
+	| <VIDEO> <BA> MediaAttributes()
+}
+void MediaAttributes():
+{}
+{
+	<SOURCE> (<ID> <PUNTO> (<MOV> |  <MP4>) ) <COMA> <WIDTH> <EQUAL> <ENTERO> <PX> <COMA> <HEIGHT> <EQUAL> <ENTERO> <PX>
+}
+void AudioAttributes():
+{}
+{
+	<SOURCE>  (<ID> <PUNTO> (<MP3> | <WAV>) )
+}
+void ImgAttributes():
+{}
+{
+	<SOURCE>  (<ID> <PUNTO> (<JPG> | <PNG>) )
+}
+void ManyIDs():
+{}
+{
+	(<ID>)+
+}

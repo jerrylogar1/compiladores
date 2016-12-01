@@ -1,0 +1,40 @@
+create page with title ejemplo {
+
+
+title: hola como;
+subtitle: hola como;
+paragraph: hola como;
+audio{
+source  videov1.mp3 
+} with class=test and id=text;
+image{
+	source x.jpg,
+	width = 100px,
+	height = 100px
+
+}with class=test and id=text;
+video{
+	source x.mp4,
+	width = 100px,
+	height = 100px
+
+}with class=test and id=text;
+
+
+subtitle: videoname;
+
+
+paragraph : descripcion;
+
+
+
+
+
+subtitle: moreideos;
+
+
+
+
+
+
+}
