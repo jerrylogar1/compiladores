@@ -92,7 +92,7 @@ TOKEN :
 void Input():
 {System.out.println("Todo bien");}
 {
-	<CREATE><PAGE><WITH><TITLE><BA>Contenido()<BC><EOF>
+	<CREATE><PAGE><WITH><TITLE><ID><BA>Contenido()<BC><EOF>
 }
 void Contenido():
 {
@@ -112,7 +112,7 @@ System.out.println("Todo bien en Contenido");
 }
 {
 	(MediaStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
-	| TextElement() <DP> ManyIDs() <PCOMA>
+	| TextElement() <DP> (<ID>)+ <PCOMA>
 	| StructureElementsWithElements() <PCOMA>
 	| FullStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
 	| TopAndBottomStructures() <BA> StAttributes() <BC> <PCOMA>)
@@ -137,9 +137,9 @@ void StAttributes():
 void StructureElementsWithElements():
 {}
 {
-	(<TABLE> <WITH> <BA> <PA> ManyAttributesForTable() <PC> <CA> <PA> ManyAttributesForTable() ManyIDs() <CC> <BC>
+	(<TABLE> <WITH> <BA> <PA> ManyAttributesForTable() <PC> <CA> <PA> ManyAttributesForTable() (<ID>)+ <CC> <BC>
 	| <LIST> <WITH> <ENTERO> <ITEMS>
-	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> ManyIDs() <CC> <BC>
+	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> (<ID>)+ <CC> <BC>
 	| <NAV> <WITH> <BA> AttributesForBar() <BC>)
 }
 void ManyAttributesForTable():
@@ -203,9 +203,4 @@ void ImgAttributes():
 {}
 {
 	<SOURCE>  (<ID> <PUNTO> (<JPG> | <PNG>) )
-}
-void ManyIDs():
-{}
-{
-	(<ID>)+
 }
