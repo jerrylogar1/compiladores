@@ -12,7 +12,7 @@ public class PF
     {
      
       PF parser = new PF(new java.io.FileInputStream(args[0]));
-      fullReturn = parser.Input();
+      fullReturn = parser.Input(fullReturn);
     }
     catch(java.io.FileNotFoundException e){	System.out.println("El archivo no esta..."); }
     try {
@@ -94,9 +94,9 @@ TOKEN :
 	| < REAL : (["0"-"9"])* "." (["0"-"9"])*(["0"-"9"])*  >
 
 }
-String Input():
+String Input(String x):
 {
-	String x = "";
+	
 	String node_string;
 	Token title_a;
 	System.out.println("Todo bien");}
@@ -111,36 +111,95 @@ String Input():
 	x += title_a.image;
 	x += "</title>\n";
 	x += "</head>\n";
+	x += "<body>\n";
 	x += node_string;
+	//System.out.println(node_string);
 	x += "</html>\n";
 	return x;
 	}
 }
 String Contenido():
 {
-	String current_string = "";
+	String current_string="";
+	String temp = "";
 	Token times;
 }
 {
-	(current_string = Content()  (times=<ENTERO><TIMES>{current_string += times.image;})* )+ 
-	{ return current_string;	}
+	(temp = Content(){current_string += temp; }  (times=<ENTERO><TIMES>{current_string += times.image;})* )+ 
+	{ 
+	System.out.println(current_string);
+		return current_string;	}
 }
 String Content():
 {
-String curr = "";
-Token name;
-Token class_;
-Token text_type;
-Token description;
+	String curr;
+	String acum;
+	Token name;
+	Token class_;
+	Token text_type;
+	Token description;
+	String acum_desc = "";
 }
 {
-	(MediaStructures() <WITH>  <CLASS> <EQUAL>  class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA>
-	|  (text_type =<PARAGRAPH> | text_type =<TITLE> | text_type =<SUBTITLE>) <DP> (description = <ID>)+ <PCOMA> 
-	| StructureElementsWithElements() <PCOMA>
-	| FullStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
-	| TopAndBottomStructures() <BA> StAttributes() <BC> <PCOMA>)
+	( acum = MediaStructures() <WITH> <CLASS> <EQUAL>  class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA> 
+	{ //This string concat is for Media 
+		curr = acum;
+		curr += " class = '" + class_.image + "' id = '" + name.image + "'"; 
+		System.out.println(curr);
+		return curr;
+	}
+	|  (text_type = <PARAGRAPH> | text_type =<TITLE> | text_type =<SUBTITLE>) <DP> (description = <ID>{acum_desc += " " + description.image;})+  <PCOMA> 
+	{
+		if(text_type.image == "paragraph") {
 
-	{return curr;}
+			curr = "<p>" + acum_desc + "</p>\n";
+		}
+		else if (text_type.image == "title"){
+			curr = "<h1>" + acum_desc + "</h1>\n";
+		}
+		else if (text_type.image == "subtitle"){
+			curr = "<h2>" + acum_desc + "</h2>\n";
+		}
+		else{ curr = "Error!!!!";}
+		return curr;
+	}
+	|  StructureElementsWithElements() <PCOMA>
+	{
+
+		curr = "St";
+		return curr;
+	}
+	| (text_type = <DIV> | text_type = <SECTION>) <WITH> <CLASS> <EQUAL> class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA>
+	{
+		if(text_type.image == "div"){
+			curr = "<div id = '"+ name.image +"' class= '" + class_.image + "' >";
+		}
+		else if (text_type.image == "section")
+		{
+			curr = "<section id = '"+ name.image +"' class= '" + class_.image + "' >";
+		}
+		else{
+			curr = "Error!!!!";
+		}
+		
+		return curr;
+	}
+	| (text_type = <HEADER> |text_type =  <FOOTER>) <BA>  StAttributes() <BC> <PCOMA>)
+	{
+		if(text_type.image == "header"){
+			curr = "<header>";
+		}
+		else if (text_type.image == "footer")
+		{
+			curr = "<footer>";
+		}
+		else{
+			curr = "Error!!!!";
+		}
+		return curr;
+	}
+
+	
 }
 
 void StAttributes():
@@ -148,10 +207,10 @@ void StAttributes():
 	
 }
 {
-	(FullStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
-	| MediaStructures() StAttributes()
-	| StructureElementsWithElements() StAttributes()
-	| {})
+	
+	MediaStructures() StAttributes(){}
+	| StructureElementsWithElements() StAttributes(){}
+	| {}
 }
 void StructureElementsWithElements():
 {}
@@ -178,35 +237,43 @@ void BarStyle():
 	(<SMALLBLOCK> | <MEDIUMBLOCK> | <LARGEBLOCK>)
 }
 
-void TopAndBottomStructures():
-{}
+
+String MediaStructures():
 {
-	<HEADER> | <FOOTER>
+	String att_st_audio = "";
+	String att_st_img = "";
+	String att_st_video = "";
+	String media_st = "";
 }
-void FullStructures():
-{}
 {
-	<DIV> | <SECTION>
+	(<IMAGE> <BA> att_st_img = ImgAttributes() <BC>  {media_st += "<img src="; media_st += att_st_img; return media_st;} 
+	| <AUDIO> <BA> att_st_audio = AudioAttributes() <BC> {media_st += "<audio>\n"; media_st += att_st_audio; media_st += "</audio>"; return media_st;} 
+	| <VIDEO> <BA> att_st_video = MediaAttributes() <BC> ) <WITH> <CLASS> <EQUAL>  class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA> {media_st += "<video>\n"; media_st += att_st_video; media_st += "</video>"; return media_st;} 
 }
-void MediaStructures():
-{}
+String MediaAttributes():
+{String source_st = ""; Token file; Token format; Token width_video; Token height_video;}
 {
-	<IMAGE> <BA> ImgAttributes() <BC> 
-	| <AUDIO> <BA> AudioAttributes() <BC> 
-	| <VIDEO> <BA> MediaAttributes() <BC> 
+	<SOURCE> (file = <ID> <PUNTO> (format = <MOV> |  format = <MP4>) ) <COMA> <WIDTH> <EQUAL> width_video = <ENTERO> <PX> <COMA> <HEIGHT> <EQUAL> height_video = <ENTERO> <PX>
+	{source_st = "\t<source = '" + file.image + "." + format.image + "' width = '" + width_video.image + "px'"+" height = '" + height_video.image + "px'>";
+	return source_st;}
 }
-void MediaAttributes():
-{}
+String AudioAttributes():
+{String source_st = ""; Token file; Token format;}
 {
-	<SOURCE> (<ID> <PUNTO> (<MOV> |  <MP4>) ) <COMA> <WIDTH> <EQUAL> <ENTERO> <PX> <COMA> <HEIGHT> <EQUAL> <ENTERO> <PX>
+	<SOURCE>  (file = <ID> <PUNTO> (format = <MP3> | format = <WAV>) ) {source_st = "\t<source = '" + file.image + "." + format.image + "' type='audio/mpeg'>\n";
+	return source_st;}
 }
-void AudioAttributes():
-{}
-{
-	<SOURCE>  (<ID> <PUNTO> (<MP3> | <WAV>) )
+String ImgAttributes():
+{	String source_st = ""; 
+	Token width_img;
+	Token height_img; 
+	Token format; 
+	Token file;
 }
-void ImgAttributes():
-{}
 {
-	<SOURCE>  (<ID> <PUNTO> (<JPG> | <PNG>) ) <COMA> <WIDTH> <EQUAL> <ENTERO> <PX> <COMA> <HEIGHT> <EQUAL> <ENTERO> <PX>
+	<SOURCE>  (file = <ID> <PUNTO> (format = <JPG> | format = <PNG>) ) <COMA> <WIDTH> <EQUAL> width_img = <ENTERO> <PX> <COMA> <HEIGHT> <EQUAL> height_img = <ENTERO> <PX> 
+	{
+		source_st ="'" +file.image + "." + format.image + "' width = '" + width_img.image + "px' height = " + height_img.image + "px'";
+	 	return source_st;
+	}
 }
