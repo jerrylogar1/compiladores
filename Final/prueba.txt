@@ -15,7 +15,7 @@ table with{
 (costo) (100) (150) (300) 
 (inventario) (10) (7) (3)
 ]
-} ;
+} ; 4 times
 
 image{
 	source x.jpg,

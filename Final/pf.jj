@@ -7,16 +7,21 @@ public class PF
 {
   public static void main(String args[]) throws ParseException 
   {
+  	String fullReturn = "";
     try 
     {
+     
       PF parser = new PF(new java.io.FileInputStream(args[0]));
-      parser.Input();
+      fullReturn = parser.Input();
     }
-    catch(java.io.FileNotFoundException e)
-    {
-      System.out.println("El archivo no esta...");
-    }
+    catch(java.io.FileNotFoundException e){	System.out.println("El archivo no esta..."); }
+    try {
+    	PrintWriter writer = new PrintWriter("result.html", "UTF-8");
+		writer.println(fullReturn);
+        writer.close();
+    } catch (Exception e) { System.out.println("Output file cannot be created"); }
   }
+  
 }
 PARSER_END(PF)
 
@@ -89,33 +94,53 @@ TOKEN :
 	| < REAL : (["0"-"9"])* "." (["0"-"9"])*(["0"-"9"])*  >
 
 }
-void Input():
-{System.out.println("Todo bien");}
+String Input():
 {
-	<CREATE><PAGE><WITH><TITLE><ID><BA>Contenido()<BC><EOF>
+	String x = "";
+	String node_string;
+	Token title_a;
+	System.out.println("Todo bien");}
+{
+	<CREATE><PAGE><WITH> <TITLE> title_a = <ID> <BA> node_string = Contenido() <BC><EOF>
+	{
+	x = "<!DOCTYPE html>\n";
+	x += "<html>\n";
+	x += "<head>\n";
+	x += "<meta charset='UTF-8'>\n";
+	x += "<title>";
+	x += title_a.image;
+	x += "</title>\n";
+	x += "</head>\n";
+	x += node_string;
+	x += "</html>\n";
+	return x;
+	}
 }
-void Contenido():
+String Contenido():
 {
-System.out.println("Todo bien en Contenido");
+	String current_string = "";
+	Token times;
 }
 {
-	(Content() Tiempo())+ 
+	(current_string = Content()  (times=<ENTERO><TIMES>{current_string += times.image;})* )+ 
+	{ return current_string;	}
 }
-void Tiempo():
-{}
+String Content():
 {
-	(<ENTERO><TIMES>| {})
+String curr = "";
+Token name;
+Token class_;
+Token text_type;
+Token description;
 }
-void Content():
 {
-System.out.println("Todo bien en Contenido");
-}
-{
-	(MediaStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
-	| (<PARAGRAPH> | <TITLE> | <SUBTITLE>) <DP> (<ID>)+ <PCOMA>
+	(MediaStructures() <WITH>  <CLASS> <EQUAL>  class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA>
+	|  (text_type =<PARAGRAPH> | text_type =<TITLE> | text_type =<SUBTITLE>) <DP> (description = <ID>)+ <PCOMA> 
 	| StructureElementsWithElements() <PCOMA>
 	| FullStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
 	| TopAndBottomStructures() <BA> StAttributes() <BC> <PCOMA>)
+
+	{return curr;}
 }
 
 void StAttributes():

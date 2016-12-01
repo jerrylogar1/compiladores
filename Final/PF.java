@@ -6,36 +6,69 @@
 public class PF implements PFConstants {
   public static void main(String args[]) throws ParseException
   {
+        String fullReturn = "";
     try
     {
+
       PF parser = new PF(new java.io.FileInputStream(args[0]));
-      parser.Input();
+      fullReturn = parser.Input();
     }
-    catch(java.io.FileNotFoundException e)
-    {
-      System.out.println("El archivo no esta...");
-    }
+    catch(java.io.FileNotFoundException e){     System.out.println("El archivo no esta..."); }
+    try {
+        PrintWriter writer = new PrintWriter("result.html", "UTF-8");
+                writer.println(fullReturn);
+        writer.close();
+    } catch (Exception e) { System.out.println("Output file cannot be created"); }
   }
 
-  static final public void Input() throws ParseException {
- System.out.println("Todo bien");
+  static final public String Input() throws ParseException {
+        String x = "";
+        String node_string;
+        Token title_a;
+        System.out.println("Todo bien");
     jj_consume_token(CREATE);
     jj_consume_token(PAGE);
     jj_consume_token(WITH);
     jj_consume_token(TITLE);
-    jj_consume_token(ID);
+    title_a = jj_consume_token(ID);
     jj_consume_token(BA);
-    Contenido();
+    node_string = Contenido();
     jj_consume_token(BC);
     jj_consume_token(0);
+        x = "<!DOCTYPE html>\u005cn";
+        x += "<html>\u005cn";
+        x += "<head>\u005cn";
+        x += "<meta charset='UTF-8'>\u005cn";
+        x += "<title>";
+        x += title_a.image;
+        x += "</title>\u005cn";
+        x += "</head>\u005cn";
+        x += node_string;
+        x += "</html>\u005cn";
+        {if (true) return x;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void Contenido() throws ParseException {
-System.out.println("Todo bien en Contenido");
+  static final public String Contenido() throws ParseException {
+        String current_string = "";
+        Token times;
     label_1:
     while (true) {
-      Content();
-      Tiempo();
+      current_string = Content();
+      label_2:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case ENTERO:
+          ;
+          break;
+        default:
+          jj_la1[0] = jj_gen;
+          break label_2;
+        }
+        times = jj_consume_token(ENTERO);
+        jj_consume_token(TIMES);
+                                                            current_string += times.image;
+      }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case TABLE:
       case HEADER:
@@ -54,26 +87,20 @@ System.out.println("Todo bien en Contenido");
         ;
         break;
       default:
-        jj_la1[0] = jj_gen;
+        jj_la1[1] = jj_gen;
         break label_1;
       }
     }
+          {if (true) return current_string;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public void Tiempo() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case ENTERO:
-      jj_consume_token(ENTERO);
-      jj_consume_token(TIMES);
-      break;
-    default:
-      jj_la1[1] = jj_gen;
-
-    }
-  }
-
-  static final public void Content() throws ParseException {
-System.out.println("Todo bien en Contenido");
+  static final public String Content() throws ParseException {
+String curr = "";
+Token name;
+Token class_;
+Token text_type;
+Token description;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case AUDIO:
     case VIDEO:
@@ -82,11 +109,11 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(WITH);
       jj_consume_token(CLASS);
       jj_consume_token(EQUAL);
-      jj_consume_token(ID);
+      class_ = jj_consume_token(ID);
       jj_consume_token(AND);
       jj_consume_token(IDG);
       jj_consume_token(EQUAL);
-      jj_consume_token(ID);
+      name = jj_consume_token(ID);
       jj_consume_token(PCOMA);
       break;
     case PARAGRAPH:
@@ -94,13 +121,13 @@ System.out.println("Todo bien en Contenido");
     case SUBTITLE:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PARAGRAPH:
-        jj_consume_token(PARAGRAPH);
+        text_type = jj_consume_token(PARAGRAPH);
         break;
       case TITLE:
-        jj_consume_token(TITLE);
+        text_type = jj_consume_token(TITLE);
         break;
       case SUBTITLE:
-        jj_consume_token(SUBTITLE);
+        text_type = jj_consume_token(SUBTITLE);
         break;
       default:
         jj_la1[2] = jj_gen;
@@ -108,16 +135,16 @@ System.out.println("Todo bien en Contenido");
         throw new ParseException();
       }
       jj_consume_token(DP);
-      label_2:
+      label_3:
       while (true) {
-        jj_consume_token(ID);
+        description = jj_consume_token(ID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case ID:
           ;
           break;
         default:
           jj_la1[3] = jj_gen;
-          break label_2;
+          break label_3;
         }
       }
       jj_consume_token(PCOMA);
@@ -155,6 +182,8 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(-1);
       throw new ParseException();
     }
+         {if (true) return curr;}
+    throw new Error("Missing return statement in function");
   }
 
   static final public void StAttributes() throws ParseException {
@@ -221,7 +250,7 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(BA);
       AttributesForBar();
       jj_consume_token(CA);
-      label_3:
+      label_4:
       while (true) {
         jj_consume_token(ID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -230,7 +259,7 @@ System.out.println("Todo bien en Contenido");
           break;
         default:
           jj_la1[6] = jj_gen;
-          break label_3;
+          break label_4;
         }
       }
       jj_consume_token(CC);
@@ -251,7 +280,7 @@ System.out.println("Todo bien en Contenido");
   }
 
   static final public void TableContent() throws ParseException {
-    label_4:
+    label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PA:
@@ -259,12 +288,12 @@ System.out.println("Todo bien en Contenido");
         break;
       default:
         jj_la1[8] = jj_gen;
-        break label_4;
+        break label_5;
       }
       jj_consume_token(PA);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ID:
-        label_5:
+        label_6:
         while (true) {
           jj_consume_token(ID);
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -273,7 +302,7 @@ System.out.println("Todo bien en Contenido");
             break;
           default:
             jj_la1[9] = jj_gen;
-            break label_5;
+            break label_6;
           }
         }
         break;
@@ -464,10 +493,10 @@ System.out.println("Todo bien en Contenido");
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xef900000,0x0,0x0,0x0,0xef900000,0xee100000,0x0,0x86100000,0x80,0x0,0x0,0x0,0x1800000,0x8000000,0x60000000,0x0,0x0,0x0,};
+      jj_la1_0 = new int[] {0x0,0xef900000,0x0,0x0,0xef900000,0xee100000,0x0,0x86100000,0x80,0x0,0x0,0x0,0x1800000,0x8000000,0x60000000,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x600e,0x10000000,0xe,0x8000000,0x600e,0x6000,0x8000000,0x0,0x0,0x8000000,0x18000000,0x700,0x0,0x2000,0x4000,0x300000,0xc00000,0x3000000,};
+      jj_la1_1 = new int[] {0x10000000,0x600e,0xe,0x8000000,0x600e,0x6000,0x8000000,0x0,0x0,0x8000000,0x18000000,0x700,0x0,0x2000,0x4000,0x300000,0xc00000,0x3000000,};
    }
 
   /** Constructor with InputStream. */
