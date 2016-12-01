@@ -7,12 +7,23 @@ paragraph: hola como;
 audio{
 source  videov1.mp3 
 } with class=test and id=text;
+table with{
+(4 columns and 4 rows)
+[
+(nombre)(vaso)(plato)(botella)
+(ids) (1) (2) (3) 
+(costo) (100) (150) (300) 
+(inventario) (10) (7) (3)
+]
+} ;
+
 image{
 	source x.jpg,
 	width = 100px,
 	height = 100px
 
 }with class=test and id=text;
+
 video{
 	source x.mp4,
 	width = 100px,
@@ -31,10 +42,5 @@ paragraph : descripcion;
 
 
 subtitle: moreideos;
-
-
-
-
-
 
 }

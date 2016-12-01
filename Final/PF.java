@@ -32,9 +32,32 @@ public class PF implements PFConstants {
 
   static final public void Contenido() throws ParseException {
 System.out.println("Todo bien en Contenido");
-    Content();
-    Tiempo();
-    Contenido();
+    label_1:
+    while (true) {
+      Content();
+      Tiempo();
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case TABLE:
+      case HEADER:
+      case FOOTER:
+      case SIDEBAR:
+      case NAV:
+      case DIV:
+      case AUDIO:
+      case VIDEO:
+      case LIST:
+      case PARAGRAPH:
+      case TITLE:
+      case SUBTITLE:
+      case SECTION:
+      case IMAGE:
+        ;
+        break;
+      default:
+        jj_la1[0] = jj_gen;
+        break label_1;
+      }
+    }
   }
 
   static final public void Tiempo() throws ParseException {
@@ -44,7 +67,7 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(TIMES);
       break;
     default:
-      jj_la1[0] = jj_gen;
+      jj_la1[1] = jj_gen;
 
     }
   }
@@ -69,9 +92,23 @@ System.out.println("Todo bien en Contenido");
     case PARAGRAPH:
     case TITLE:
     case SUBTITLE:
-      TextElement();
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PARAGRAPH:
+        jj_consume_token(PARAGRAPH);
+        break;
+      case TITLE:
+        jj_consume_token(TITLE);
+        break;
+      case SUBTITLE:
+        jj_consume_token(SUBTITLE);
+        break;
+      default:
+        jj_la1[2] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       jj_consume_token(DP);
-      label_1:
+      label_2:
       while (true) {
         jj_consume_token(ID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -79,8 +116,8 @@ System.out.println("Todo bien en Contenido");
           ;
           break;
         default:
-          jj_la1[1] = jj_gen;
-          break label_1;
+          jj_la1[3] = jj_gen;
+          break label_2;
         }
       }
       jj_consume_token(PCOMA);
@@ -114,25 +151,7 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(PCOMA);
       break;
     default:
-      jj_la1[2] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-  }
-
-  static final public void TextElement() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case PARAGRAPH:
-      jj_consume_token(PARAGRAPH);
-      break;
-    case TITLE:
-      jj_consume_token(TITLE);
-      break;
-    case SUBTITLE:
-      jj_consume_token(SUBTITLE);
-      break;
-    default:
-      jj_la1[3] = jj_gen;
+      jj_la1[4] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -167,7 +186,7 @@ System.out.println("Todo bien en Contenido");
       StAttributes();
       break;
     default:
-      jj_la1[4] = jj_gen;
+      jj_la1[5] = jj_gen;
 
     }
   }
@@ -179,23 +198,14 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(WITH);
       jj_consume_token(BA);
       jj_consume_token(PA);
-      ManyAttributesForTable();
+      jj_consume_token(ENTERO);
+      jj_consume_token(COLUMNS);
+      jj_consume_token(AND);
+      jj_consume_token(ENTERO);
+      jj_consume_token(ROWS);
       jj_consume_token(PC);
       jj_consume_token(CA);
-      jj_consume_token(PA);
-      ManyAttributesForTable();
-      label_2:
-      while (true) {
-        jj_consume_token(ID);
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case ID:
-          ;
-          break;
-        default:
-          jj_la1[5] = jj_gen;
-          break label_2;
-        }
-      }
+      TableContent();
       jj_consume_token(CC);
       jj_consume_token(BC);
       break;
@@ -240,34 +250,43 @@ System.out.println("Todo bien en Contenido");
     }
   }
 
-  static final public void ManyAttributesForTable() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case ENTERO:
-      label_4:
-      while (true) {
-        AttributesForTable();
-        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case ENTERO:
-          ;
-          break;
-        default:
-          jj_la1[8] = jj_gen;
-          break label_4;
-        }
+  static final public void TableContent() throws ParseException {
+    label_4:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PA:
+        ;
+        break;
+      default:
+        jj_la1[8] = jj_gen;
+        break label_4;
       }
-      break;
-    default:
-      jj_la1[9] = jj_gen;
-
+      jj_consume_token(PA);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case ID:
+        label_5:
+        while (true) {
+          jj_consume_token(ID);
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case ID:
+            ;
+            break;
+          default:
+            jj_la1[9] = jj_gen;
+            break label_5;
+          }
+        }
+        break;
+      case ENTERO:
+        jj_consume_token(ENTERO);
+        break;
+      default:
+        jj_la1[10] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      jj_consume_token(PC);
     }
-  }
-
-  static final public void AttributesForTable() throws ParseException {
-    jj_consume_token(ENTERO);
-    jj_consume_token(COLUMNS);
-    jj_consume_token(AND);
-    jj_consume_token(ENTERO);
-    jj_consume_token(ROWS);
   }
 
   static final public void AttributesForBar() throws ParseException {
@@ -290,39 +309,7 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(LARGEBLOCK);
       break;
     default:
-      jj_la1[10] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-  }
-
-  static final public void ManyAttributesTableOpt() throws ParseException {
-    label_5:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case WITH:
-        ;
-        break;
-      default:
-        jj_la1[11] = jj_gen;
-        break label_5;
-      }
-      AttributesTableOpt();
-    }
-  }
-
-  static final public void AttributesTableOpt() throws ParseException {
-    jj_consume_token(WITH);
-    jj_consume_token(HEADERS);
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case YES:
-      jj_consume_token(YES);
-      break;
-    case NO:
-      jj_consume_token(NO);
-      break;
-    default:
-      jj_la1[12] = jj_gen;
+      jj_la1[11] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -337,7 +324,7 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(FOOTER);
       break;
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[12] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -352,7 +339,7 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(SECTION);
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[13] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -370,14 +357,16 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(AUDIO);
       jj_consume_token(BA);
       AudioAttributes();
+      jj_consume_token(BC);
       break;
     case VIDEO:
       jj_consume_token(VIDEO);
       jj_consume_token(BA);
       MediaAttributes();
+      jj_consume_token(BC);
       break;
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[14] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -395,7 +384,7 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(MP4);
       break;
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[15] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -423,7 +412,7 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(WAV);
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[16] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -441,10 +430,20 @@ System.out.println("Todo bien en Contenido");
       jj_consume_token(PNG);
       break;
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[17] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+    jj_consume_token(COMA);
+    jj_consume_token(WIDTH);
+    jj_consume_token(EQUAL);
+    jj_consume_token(ENTERO);
+    jj_consume_token(PX);
+    jj_consume_token(COMA);
+    jj_consume_token(HEIGHT);
+    jj_consume_token(EQUAL);
+    jj_consume_token(ENTERO);
+    jj_consume_token(PX);
   }
 
   static private boolean jj_initialized_once = false;
@@ -457,7 +456,7 @@ System.out.println("Todo bien en Contenido");
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[19];
+  static final private int[] jj_la1 = new int[18];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -465,10 +464,10 @@ System.out.println("Todo bien en Contenido");
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x0,0xef900000,0x0,0xee100000,0x0,0x0,0x86100000,0x0,0x0,0x0,0x80000,0x0,0x1800000,0x8000000,0x60000000,0x0,0x0,0x0,};
+      jj_la1_0 = new int[] {0xef900000,0x0,0x0,0x0,0xef900000,0xee100000,0x0,0x86100000,0x80,0x0,0x0,0x0,0x1800000,0x8000000,0x60000000,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x10000000,0x8000000,0x600e,0xe,0x6000,0x8000000,0x8000000,0x0,0x10000000,0x10000000,0x700,0x0,0x1800,0x0,0x2000,0x4000,0x300000,0xc00000,0x3000000,};
+      jj_la1_1 = new int[] {0x600e,0x10000000,0xe,0x8000000,0x600e,0x6000,0x8000000,0x0,0x0,0x8000000,0x18000000,0x700,0x0,0x2000,0x4000,0x300000,0xc00000,0x3000000,};
    }
 
   /** Constructor with InputStream. */
@@ -489,7 +488,7 @@ System.out.println("Todo bien en Contenido");
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -503,7 +502,7 @@ System.out.println("Todo bien en Contenido");
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -520,7 +519,7 @@ System.out.println("Todo bien en Contenido");
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -530,7 +529,7 @@ System.out.println("Todo bien en Contenido");
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -546,7 +545,7 @@ System.out.println("Todo bien en Contenido");
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -555,7 +554,7 @@ System.out.println("Todo bien en Contenido");
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 19; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -611,7 +610,7 @@ System.out.println("Todo bien en Contenido");
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 19; i++) {
+    for (int i = 0; i < 18; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

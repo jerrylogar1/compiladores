@@ -99,7 +99,7 @@ void Contenido():
 System.out.println("Todo bien en Contenido");
 }
 {
-	Content() Tiempo() Contenido()
+	(Content() Tiempo())+ 
 }
 void Tiempo():
 {}
@@ -112,18 +112,12 @@ System.out.println("Todo bien en Contenido");
 }
 {
 	(MediaStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
-	| TextElement() <DP> (<ID>)+ <PCOMA>
+	| (<PARAGRAPH> | <TITLE> | <SUBTITLE>) <DP> (<ID>)+ <PCOMA>
 	| StructureElementsWithElements() <PCOMA>
 	| FullStructures() <WITH> <CLASS> <EQUAL> <ID> <AND> <IDG> <EQUAL> <ID> <PCOMA>
 	| TopAndBottomStructures() <BA> StAttributes() <BC> <PCOMA>)
 }
-void TextElement():
-{
-	
-}
-{
-	(<PARAGRAPH> | <TITLE> | <SUBTITLE>)
-}
+
 void StAttributes():
 {
 	
@@ -137,21 +131,17 @@ void StAttributes():
 void StructureElementsWithElements():
 {}
 {
-	(<TABLE> <WITH> <BA> <PA> ManyAttributesForTable() <PC> <CA> <PA> ManyAttributesForTable() (<ID>)+ <CC> <BC>
+	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> <ENTERO> <ROWS> <PC> <CA> TableContent() <CC> <BC>
 	| <LIST> <WITH> <ENTERO> <ITEMS>
 	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> (<ID>)+ <CC> <BC>
 	| <NAV> <WITH> <BA> AttributesForBar() <BC>)
 }
-void ManyAttributesForTable():
+void TableContent():
 {}
 {
-	(AttributesForTable())+ | {}
+	(<PA> ((<ID>)+ | <ENTERO>) <PC>)*
 }
-void AttributesForTable():
-{}
-{
-	<ENTERO> <COLUMNS> <AND> <ENTERO> <ROWS>
-}
+
 void AttributesForBar():
 {}
 {
@@ -162,16 +152,7 @@ void BarStyle():
 {
 	(<SMALLBLOCK> | <MEDIUMBLOCK> | <LARGEBLOCK>)
 }
-void ManyAttributesTableOpt():
-{}
-{
-	(AttributesTableOpt())*
-}
-void AttributesTableOpt():
-{}
-{
-	<WITH> <HEADERS> (<YES>| <NO>)
-}
+
 void TopAndBottomStructures():
 {}
 {
@@ -185,9 +166,9 @@ void FullStructures():
 void MediaStructures():
 {}
 {
-	<IMAGE> <BA> ImgAttributes() <BC>
-	| <AUDIO> <BA> AudioAttributes()
-	| <VIDEO> <BA> MediaAttributes()
+	<IMAGE> <BA> ImgAttributes() <BC> 
+	| <AUDIO> <BA> AudioAttributes() <BC> 
+	| <VIDEO> <BA> MediaAttributes() <BC> 
 }
 void MediaAttributes():
 {}
@@ -202,5 +183,5 @@ void AudioAttributes():
 void ImgAttributes():
 {}
 {
-	<SOURCE>  (<ID> <PUNTO> (<JPG> | <PNG>) )
+	<SOURCE>  (<ID> <PUNTO> (<JPG> | <PNG>) ) <COMA> <WIDTH> <EQUAL> <ENTERO> <PX> <COMA> <HEIGHT> <EQUAL> <ENTERO> <PX>
 }
