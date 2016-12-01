@@ -118,6 +118,8 @@ String Input(String x):
 	return x;
 	}
 }
+
+
 String Contenido():
 {
 	String current_string="";
@@ -130,6 +132,8 @@ String Contenido():
 	System.out.println(current_string);
 		return current_string;	}
 }
+
+
 String Content():
 {
 	String curr;
@@ -202,6 +206,7 @@ String Content():
 	
 }
 
+
 void StAttributes():
 {
 	
@@ -220,6 +225,8 @@ void StructureElementsWithElements():
 	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> (<ID>)+ <CC> <BC>
 	| <NAV> <WITH> <BA> AttributesForBar() <BC>)
 }
+
+
 void TableContent():
 {}
 {
@@ -248,23 +255,30 @@ String MediaStructures():
 	Token class_;
 }
 {
-	(<IMAGE> <BA> att_st_img = ImgAttributes() <BC>  {media_st += "<img src="; media_st += att_st_img; return media_st;} 
-	| <AUDIO> <BA> att_st_audio = AudioAttributes() <BC> {media_st += "<audio>\n"; media_st += att_st_audio; media_st += "</audio>"; return media_st;} 
-	| <VIDEO> <BA> att_st_video = MediaAttributes() <BC> ) <WITH> <CLASS> <EQUAL>  class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA> {media_st += "<video>\n"; media_st += att_st_video; media_st += "</video>"; return media_st;} 
+	(<IMAGE> <BA> att_st_img = ImgAttributes() <BC>  {media_st += "<img src="; media_st += att_st_img+"'>"; return media_st;} 
+	| <AUDIO> <BA> att_st_audio = AudioAttributes() <BC> {media_st += "\n\n<audio controls>\n"; media_st += att_st_audio; media_st += "Your browser does not support the audio element.</audio>"; return media_st;} 
+	| <VIDEO> <BA> att_st_video = MediaAttributes() <BC> ) <WITH> <CLASS> <EQUAL>  class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA> {media_st += "\n\n<video"; media_st += att_st_video; media_st += "</video>"; 
+	return media_st;} 
 }
+
+
 String MediaAttributes():
 {String source_st = ""; Token file; Token format; Token width_video; Token height_video;}
 {
 	<SOURCE> (file = <ID> <PUNTO> (format = <MOV> |  format = <MP4>) ) <COMA> <WIDTH> <EQUAL> width_video = <ENTERO> <PX> <COMA> <HEIGHT> <EQUAL> height_video = <ENTERO> <PX>
-	{source_st = "\t<source = '" + file.image + "." + format.image + "' width = '" + width_video.image + "px'"+" height = '" + height_video.image + "px'>";
+	{source_st = " width='" + width_video.image + "'"+" height='" + height_video.image + "' controls>\n \t<source src='" + file.image + "." + format.image + "' type='video/mp4'>\n" ;
 	return source_st;}
 }
+
+
 String AudioAttributes():
 {String source_st = ""; Token file; Token format;}
 {
-	<SOURCE>  (file = <ID> <PUNTO> (format = <MP3> | format = <WAV>) ) {source_st = "\t<source = '" + file.image + "." + format.image + "' type='audio/mpeg'>\n";
+	<SOURCE>  (file = <ID> <PUNTO> (format = <MP3> | format = <WAV>) ) {source_st = "\t<source src = '" + file.image + "." + format.image + "' type='audio/mpeg'>";
 	return source_st;}
 }
+
+
 String ImgAttributes():
 {	String source_st = ""; 
 	Token width_img;
