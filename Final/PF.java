@@ -408,13 +408,15 @@ public class PF implements PFConstants {
         String att_st_img = "";
         String att_st_video = "";
         String media_st = "";
+        Token name;
+        Token class_;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case IMAGE:
       jj_consume_token(IMAGE);
       jj_consume_token(BA);
       att_st_img = ImgAttributes();
       jj_consume_token(BC);
-                                                        media_st += "<img src="; media_st += att_st_img; {if (true) return media_st;}
+                                                          media_st += "<img src="; media_st += att_st_img; {if (true) return media_st;}
       break;
     case AUDIO:
       jj_consume_token(AUDIO);
@@ -428,13 +430,22 @@ public class PF implements PFConstants {
       jj_consume_token(BA);
       att_st_video = MediaAttributes();
       jj_consume_token(BC);
-                                                             media_st += "<video>\u005cn"; media_st += att_st_video; media_st += "</video>"; {if (true) return media_st;}
       break;
     default:
       jj_la1[14] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+    jj_consume_token(WITH);
+    jj_consume_token(CLASS);
+    jj_consume_token(EQUAL);
+    class_ = jj_consume_token(ID);
+    jj_consume_token(AND);
+    jj_consume_token(IDG);
+    jj_consume_token(EQUAL);
+    name = jj_consume_token(ID);
+    jj_consume_token(PCOMA);
+                                                                                                                                              media_st += "<video>\u005cn"; media_st += att_st_video; media_st += "</video>"; {if (true) return media_st;}
     throw new Error("Missing return statement in function");
   }
 

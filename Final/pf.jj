@@ -244,6 +244,8 @@ String MediaStructures():
 	String att_st_img = "";
 	String att_st_video = "";
 	String media_st = "";
+	Token name;
+	Token class_;
 }
 {
 	(<IMAGE> <BA> att_st_img = ImgAttributes() <BC>  {media_st += "<img src="; media_st += att_st_img; return media_st;} 
