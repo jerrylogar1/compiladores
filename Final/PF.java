@@ -416,14 +416,14 @@ public class PF implements PFConstants {
       jj_consume_token(BA);
       att_st_img = ImgAttributes();
       jj_consume_token(BC);
-                                                          media_st += "<img src="; media_st += att_st_img; {if (true) return media_st;}
+                                                          media_st += "<img src="; media_st += att_st_img+"'>"; {if (true) return media_st;}
       break;
     case AUDIO:
       jj_consume_token(AUDIO);
       jj_consume_token(BA);
       att_st_audio = AudioAttributes();
       jj_consume_token(BC);
-                                                              media_st += "<audio>\u005cn"; media_st += att_st_audio; media_st += "</audio>"; {if (true) return media_st;}
+                                                              media_st += "\u005cn\u005cn<audio controls>\u005cn"; media_st += att_st_audio; media_st += "Your browser does not support the audio element.</audio>"; {if (true) return media_st;}
       break;
     case VIDEO:
       jj_consume_token(VIDEO);
@@ -445,7 +445,8 @@ public class PF implements PFConstants {
     jj_consume_token(EQUAL);
     name = jj_consume_token(ID);
     jj_consume_token(PCOMA);
-                                                                                                                                              media_st += "<video>\u005cn"; media_st += att_st_video; media_st += "</video>"; {if (true) return media_st;}
+                                                                                                                                              media_st += "\u005cn\u005cn<video"; media_st += att_st_video; media_st += "</video>";
+        {if (true) return media_st;}
     throw new Error("Missing return statement in function");
   }
 
@@ -476,7 +477,7 @@ public class PF implements PFConstants {
     jj_consume_token(EQUAL);
     height_video = jj_consume_token(ENTERO);
     jj_consume_token(PX);
-         source_st = "\u005ct<source = '" + file.image + "." + format.image + "' width = '" + width_video.image + "px'"+" height = '" + height_video.image + "px'>";
+         source_st = " width='" + width_video.image + "'"+" height='" + height_video.image + "' controls>\u005cn \u005ct<source src='" + file.image + "." + format.image + "' type='video/mp4'>\u005cn" ;
         {if (true) return source_st;}
     throw new Error("Missing return statement in function");
   }
@@ -498,7 +499,7 @@ public class PF implements PFConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-                                                                            source_st = "\u005ct<source = '" + file.image + "." + format.image + "' type='audio/mpeg'>\u005cn";
+                                                                            source_st = "\u005ct<source src = '" + file.image + "." + format.image + "' type='audio/mpeg'>";
         {if (true) return source_st;}
     throw new Error("Missing return statement in function");
   }

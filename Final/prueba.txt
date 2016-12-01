@@ -1,46 +1,35 @@
 create page with title ejemplo {
 
 
-title: hola como;
-subtitle: hola como;
-paragraph: hola como;
-audio{
-source  videov1.mp3 
-} with class=test and id=text;
-table with{
-(4 columns and 4 rows)
-[
-(nombre)(vaso)(plato)(botella)
-(ids) (1) (2) (3) 
-(costo) (100) (150) (300) 
-(inventario) (10) (7) (3)
-]
-} ; 4 times
+title: Eterna Rosadela;
+subtitle: Capitulo Uno;
+paragraph: En un reino muy lejano donde todo era posible exitia un joven que deseaba tener un audi y al quererlo fue posible  ;
+paragraph: En otro reino muy lejano donde todo era posible exitia otro joven que deseaba tener un audi y al quererlo fue posible  ;
+paragraph: Y en otro reino muy lejano donde todo era posible exitia otro joven que deseaba tener un audi y al quererlo fue posible  ;
 
+subtitle: Capitulo Dos;
+paragraph: En un reino muy lejano donde todo era posible exitia un joven que deseaba tener un audi y al quererlo fue posible  ;
+paragraph: En otro reino muy lejano donde todo era posible exitia otro joven que deseaba tener un audi y al quererlo fue posible  ;
+paragraph: Y en otro reino muy lejano donde todo era posible exitia otro joven que deseaba tener un audi y al quererlo fue posible  ;
+
+subtitle: Imagen del audi;
 image{
-	source x.jpg,
-	width = 100px,
-	height = 100px
+	source audi.jpg,
+	width = 480px,
+	height = 240px
+} with class=test and id=text;
 
-}with class=test and id=text;
+subtitle: Audio del audi;
+audio{
+	source bmw.mp3 
+} with class=test and id=text;
 
+subtitle: Video del audi;
 video{
-	source x.mp4,
-	width = 100px,
-	height = 100px
-
-}with class=test and id=text;
-
-
-subtitle: videoname;
-
-
-paragraph : descripcion;
-
-
-
-
-
-subtitle: moreideos;
+	source audi.mp4,
+	width = 320px,
+	height = 240px
+} with class=test and id=text; 
+with class = test and id = text;
 
 }
