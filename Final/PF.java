@@ -45,6 +45,7 @@ public class PF implements PFConstants {
         x += "<body>\u005cn";
         x += node_string;
         //System.out.println(node_string);
+        x += "\u005cn</body>\u005cn";
         x += "</html>\u005cn";
         {if (true) return x;}
     throw new Error("Missing return statement in function");

@@ -32,4 +32,14 @@ video{
 } with class=test and id=text; 
 with class = test and id = text;
 
+table with{
+(4 columns and 4 rows)
+[
+(nombre)(vaso)(plato)(botella)
+(ids) (1) (2) (3) 
+(costo) (100) (150) (300) 
+(inventario) (10) (7) (3)
+]
+} ;
+
 }

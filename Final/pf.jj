@@ -114,6 +114,7 @@ String Input(String x):
 	x += "<body>\n";
 	x += node_string;
 	//System.out.println(node_string);
+	x += "\n</body>\n";
 	x += "</html>\n";
 	return x;
 	}
