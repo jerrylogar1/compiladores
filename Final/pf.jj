@@ -123,11 +123,26 @@ String Contenido():
 	String current_string="";
 	String temp = "";
 	Token times;
+	int p = 0;
 }
 {
-	(temp = Content(){current_string += temp; }  (times=<ENTERO><TIMES>{current_string += times.image;})* )+ 
+	(temp = Content()
+	{
+		if(p == 0){
+			current_string += temp;
+		}
+
+	}  (times=<ENTERO>
+		{
+			p = Integer.parseInt(times.image);
+			for(int i = 0; i < p-1; i++){
+				current_string += temp;
+			}
+		}<TIMES>)* )+ 
 	{ 
-	System.out.println(current_string);
+	//System.out.println(current_string);
+	
+	
 		return current_string;	}
 }
 
@@ -148,7 +163,6 @@ String Content():
 	{ //This string concat is for Media 
 		curr = acum;
 		curr += " class = '" + class_.image + "' id = '" + name.image + "'"; 
-		System.out.println(curr);
 		return curr;
 	}
 	|  (text_type = <PARAGRAPH> | text_type =<TITLE> | text_type =<SUBTITLE>) <DP> (description = <ID>{acum_desc += " " + description.image;})+  <PCOMA> 
@@ -191,36 +205,69 @@ String Content():
 	
 }
 
-
-void StAttributes():
-{ String x;
-}
-{
-	MediaStructures() StAttributes(){}
-	| x = StructureElementsWithElements() StAttributes(){}
-	| {}
-}
-
-
 String StructureElementsWithElements():
 {
 	String curr = "";
-	String final_a;
+	String final_a="";
 	String a = "si";
-	Token number;
+	Token rows;
+	Token style;
+	Token columns;
+	String side_acum="";
+	int block_size;
 }
 {
-	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> number = <ENTERO> <ROWS> <PC> <CA> curr = TableContent(){System.out.println(curr);} <CC> <BC>
+	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> rows = <ENTERO> <ROWS> <PC> <CA> curr = TableContent() <CC> <BC>
 	{
-		
-		for (int i = 0;i<Integer.parseInt(number.image);i++){
-			final_a = curr;
+		final_a = "<table style='width:100%;border:1px;'>\n";
+		for (int i = 0; i < Integer.parseInt(rows.image); i++){
+			final_a += "\t<tr>\n";
+			final_a += curr;
+			final_a += "\t</tr>\n";
 		}
-		return a;
+		//System.out.println(final_a);
+		final_a += "</table>\n";
+		return final_a;
 	} 
-	| <LIST> <WITH> <ENTERO> <ITEMS> {return a;}
-	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> (<ID>)+ <CC> <BC>{return a;}
-	| <NAV> <WITH> <BA> AttributesForBar() <BC>) {return a;}
+	| <LIST> <WITH> rows = <ENTERO> <ITEMS> 
+	{
+		final_a = "<ul style='square'>\n";
+		for(int i = 0; i < Integer.parseInt(rows.image); i++){
+			final_a += "\t<li>Element "+i+"</li>\n";
+		}
+			final_a += "</ul>\n";
+		return final_a;
+	}
+	| <SIDEBAR> <WITH> <BA> rows = <ENTERO> <ITEMS> <WITH> <STYLE> (style = <SMALLBLOCK> | style =<MEDIUMBLOCK> | style =<LARGEBLOCK>) <CA> (columns = <ID>
+	{	
+		if(style.image == "smallBlock"){
+			block_size = 20;
+		}
+		else if (style.image == "mediumBlock"){block_size = 30;}
+		else if (style.image == "largeBlock"){block_size = 35;}
+		else {block_size = 20;}
+		side_acum = columns.image;
+		for (int i = 0;i < Integer.parseInt(rows.image); i++ ){
+				side_acum += "<aside style='height:"+block_size+"px;padding:10px;background-color:black;color:white;' id='"+(i+1)+">"+side_acum+"</aside>\n";
+			}
+
+		})+ <CC> <BC>
+		{
+			final_a = "<section class='classSideBar' id='idSideBar'>\n";
+			final_a += "\t<div id='sidebar' class='smallBlocks' style='float:right;'>\n";
+			final_a += side_acum;
+			final_a += "\t</div>\n";
+			final_a += "</section>\n";
+			return final_a;
+		}
+	| <NAV> <WITH> <BA> rows = <ENTERO> <ITEMS> <WITH> <STYLE> (style = <SMALLBLOCK> | style =<MEDIUMBLOCK> | style =<LARGEBLOCK>) <BC>) {
+		if(style.image == "smallBlock"){
+			block_size = 20;
+		}
+		else if (style.image == "mediumBlock"){block_size = 30;}
+		else if (style.image == "largeBlock"){block_size = 35;}
+		else {block_size = 20;}
+	return a;}
 
 	
 }
@@ -228,20 +275,17 @@ String StructureElementsWithElements():
 
 String TableContent():
 {
-	String acum = "<table style='width:100%'>";
+	String acum = "";
 	Token content;
 }
 {
-	(<PA> ((content = <ID>{acum += "<td>" + content.image + "</td>\n";})+ {return acum;}
-	| (content = <ENTERO>{acum += "<td>" + content.image + "</td>\n";}) ) <PC>)* {return acum;}
+
+	(<PA> (content = <ID>{acum += "\t<td>" + content.image + "</td>\n";}  
+	| content = <ENTERO>{acum += "\t<td>" + content.image + "</td>\n";})  <PC>)* {return acum;}
 
 }
 
-void AttributesForBar():
-{}
-{
-	<ENTERO> <ITEMS> <WITH> <STYLE> (<SMALLBLOCK> | <MEDIUMBLOCK> | <LARGEBLOCK>)
-}
+
 
 
 
