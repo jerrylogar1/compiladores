@@ -162,7 +162,7 @@ String Content():
 	( acum = MediaStructures() <WITH> <CLASS> <EQUAL>  class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA> 
 	{ //This string concat is for Media 
 		curr = acum;
-		curr += " class = '" + class_.image + "' id = '" + name.image + "'"; 
+		//curr += " class = '" + class_.image + "' id = '" + name.image + "'"; 
 		return curr;
 	}
 	|  (text_type = <PARAGRAPH> | text_type =<TITLE> | text_type =<SUBTITLE>) <DP> (description = <ID>{acum_desc += " " + description.image;})+  <PCOMA> 
@@ -214,17 +214,18 @@ String StructureElementsWithElements():
 	Token style;
 	Token columns;
 	String side_acum="";
+	String side_acum2="";
 	int block_size;
 }
 {
-	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> rows = <ENTERO> <ROWS> <PC> <CA> curr = TableContent() <CC> <BC>
+	(<TABLE> <WITH> <BA> <PA> columns=<ENTERO> <COLUMNS> <AND> rows = <ENTERO> <ROWS> <PC> <CA> curr = TableContent(Integer.parseInt(columns.image)) <CC> <BC>
 	{
-		final_a = "<table style='width:100%;border:1px;'>\n";
-		for (int i = 0; i < Integer.parseInt(rows.image); i++){
-			final_a += "\t<tr>\n";
+		final_a = "<table border='1' style='width:100%;'>\n";
+		//for (int i = 0; i < Integer.parseInt(rows.image); i++){
+			//final_a += "\t<tr>\n";
 			final_a += curr;
-			final_a += "\t</tr>\n";
-		}
+			//final_a += "\t</tr>\n";
+		//}
 		//System.out.println(final_a);
 		final_a += "</table>\n";
 		return final_a;
@@ -238,26 +239,30 @@ String StructureElementsWithElements():
 			final_a += "</ul>\n";
 		return final_a;
 	}
-	| <SIDEBAR> <WITH> <BA> rows = <ENTERO> <ITEMS> <WITH> <STYLE> (style = <SMALLBLOCK> | style =<MEDIUMBLOCK> | style =<LARGEBLOCK>) <CA> (columns = <ID>
+	| <SIDEBAR> <WITH> <BA> rows = <ENTERO> <ITEMS> <WITH> <STYLE> (style = <SMALLBLOCK> | style =<MEDIUMBLOCK> | style =<LARGEBLOCK>) <CA> (<PA>(columns = <ID> 
 	{	
-		if(style.image == "smallBlock"){
+		side_acum2 = columns.image;
+		
+		
+
+		})+ <PC>)*  <CC> <BC>
+		{
+
+			if(style.image == "smallBlock"){
 			block_size = 20;
 		}
 		else if (style.image == "mediumBlock"){block_size = 30;}
 		else if (style.image == "largeBlock"){block_size = 35;}
 		else {block_size = 20;}
-		side_acum = columns.image;
-		for (int i = 0;i < Integer.parseInt(rows.image); i++ ){
-				side_acum += "<aside style='height:"+block_size+"px;padding:10px;background-color:black;color:white;' id='"+(i+1)+">"+side_acum+"</aside>\n";
+			for (int i = 0;i < Integer.parseInt(rows.image); i++ ){
+				side_acum += "<aside style='height:"+block_size+"px;padding:10px;background-color:black;color:white;' id='"+(i+1)+"'>"+side_acum2+"</aside>\n";
 			}
-
-		})+ <CC> <BC>
-		{
 			final_a = "<section class='classSideBar' id='idSideBar'>\n";
 			final_a += "\t<div id='sidebar' class='smallBlocks' style='float:right;'>\n";
 			final_a += side_acum;
 			final_a += "\t</div>\n";
 			final_a += "</section>\n";
+			//System.out.println(final_a);
 			return final_a;
 		}
 	| <NAV> <WITH> <BA> rows = <ENTERO> <ITEMS> <WITH> <STYLE> (style = <SMALLBLOCK> | style =<MEDIUMBLOCK> | style =<LARGEBLOCK>) <BC>) {
@@ -267,21 +272,60 @@ String StructureElementsWithElements():
 		else if (style.image == "mediumBlock"){block_size = 30;}
 		else if (style.image == "largeBlock"){block_size = 35;}
 		else {block_size = 20;}
-	return a;}
+		final_a += "<nav>";
+		for(int i = 0;i < Integer.parseInt(rows.image);i++)
+		{
+			final_a += "\t<a href='#"+(i+1)+"'>Menu "+(i+1)+"</a>\n";
+		}
+			final_a += "</nav>\n";
+	
+			//System.out.println(final_a);
+	return final_a;}
 
 	
 }
 
 
-String TableContent():
+String TableContent(int columns):
 {
 	String acum = "";
 	Token content;
+	int j = 0;
 }
 {
 
-	(<PA> (content = <ID>{acum += "\t<td>" + content.image + "</td>\n";}  
-	| content = <ENTERO>{acum += "\t<td>" + content.image + "</td>\n";})  <PC>)* {return acum;}
+	(<PA> (content = <ID>
+	{
+		if(j == 0){acum+="<tr>\n";}
+		acum += "\t\t<td>" + content.image + "</td>\n";
+		j++;
+		//System.out.println(j);
+		
+
+		
+		
+		if(j == columns)
+		{
+			j=0;
+			acum += "</tr>\n";
+		}
+	}  
+	| content = <ENTERO>
+	{
+		acum += "\t\t<td>" + content.image + "</td>\n";
+		j++;
+		//System.out.println(j);
+		if(j == columns)
+		{
+			j=0;
+			acum += "</tr>\n";
+		}
+	})  <PC>)* {
+		
+		
+		
+
+	return acum;}
 
 }
 

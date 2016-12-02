@@ -55,10 +55,13 @@ public class PF implements PFConstants {
         String current_string="";
         String temp = "";
         Token times;
+        int p = 0;
     label_1:
     while (true) {
       temp = Content();
-                          current_string += temp;
+                if(p == 0){
+                        current_string += temp;
+                }
       label_2:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -70,13 +73,14 @@ public class PF implements PFConstants {
           break label_2;
         }
         times = jj_consume_token(ENTERO);
+                        p = Integer.parseInt(times.image);
+                        for(int i = 0; i < p-1; i++){
+                                current_string += temp;
+                        }
         jj_consume_token(TIMES);
-                                                                            current_string += times.image;
       }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case TABLE:
-      case HEADER:
-      case FOOTER:
       case SIDEBAR:
       case NAV:
       case DIV:
@@ -95,7 +99,9 @@ public class PF implements PFConstants {
         break label_1;
       }
     }
-        System.out.println(current_string);
+        //System.out.println(current_string);
+
+
                 {if (true) return current_string;}
     throw new Error("Missing return statement in function");
   }
@@ -125,8 +131,7 @@ public class PF implements PFConstants {
       jj_consume_token(PCOMA);
           //This string concat is for Media 
                 curr = acum;
-                curr += " class = '" + class_.image + "' id = '" + name.image + "'";
-                System.out.println(curr);
+                //curr += " class = '" + class_.image + "' id = '" + name.image + "'"; 
                 {if (true) return curr;}
       break;
     case PARAGRAPH:
@@ -220,161 +225,221 @@ public class PF implements PFConstants {
 
                 {if (true) return curr;}
       break;
-    case HEADER:
-    case FOOTER:
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case HEADER:
-        text_type = jj_consume_token(HEADER);
-        break;
-      case FOOTER:
-        text_type = jj_consume_token(FOOTER);
-        break;
-      default:
-        jj_la1[5] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-      jj_consume_token(BA);
-      StAttributes();
-      jj_consume_token(BC);
-      jj_consume_token(PCOMA);
-      break;
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[5] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
-                if(text_type.image == "header"){
-                        curr = "<header>";
-                }
-                else if (text_type.image == "footer")
-                {
-                        curr = "<footer>";
-                }
-                else{
-                        curr = "Error!!!!";
-                }
-                {if (true) return curr;}
     throw new Error("Missing return statement in function");
-  }
-
-  static final public void StAttributes() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case AUDIO:
-    case VIDEO:
-    case IMAGE:
-      MediaStructures();
-      StAttributes();
-
-      break;
-    case TABLE:
-    case SIDEBAR:
-    case NAV:
-    case LIST:
-      StructureElementsWithElements();
-      StAttributes();
-
-      break;
-    default:
-      jj_la1[7] = jj_gen;
-
-    }
   }
 
   static final public String StructureElementsWithElements() throws ParseException {
         String curr = "";
+        String final_a="";
+        String a = "si";
+        Token rows;
+        Token style;
+        Token columns;
+        String side_acum="";
+        String side_acum2="";
+        int block_size;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TABLE:
       jj_consume_token(TABLE);
       jj_consume_token(WITH);
       jj_consume_token(BA);
       jj_consume_token(PA);
-      jj_consume_token(ENTERO);
+      columns = jj_consume_token(ENTERO);
       jj_consume_token(COLUMNS);
       jj_consume_token(AND);
-      jj_consume_token(ENTERO);
+      rows = jj_consume_token(ENTERO);
       jj_consume_token(ROWS);
       jj_consume_token(PC);
       jj_consume_token(CA);
-      curr = TableContent();
-                                                                                                           System.out.println(curr);
+      curr = TableContent(Integer.parseInt(columns.image));
       jj_consume_token(CC);
       jj_consume_token(BC);
+                final_a = "<table border='1' style='width:100%;'>\u005cn";
+                //for (int i = 0; i < Integer.parseInt(rows.image); i++){
+                        //final_a += "\t<tr>\n";
+                        final_a += curr;
+                        //final_a += "\t</tr>\n";
+                //}
+                //System.out.println(final_a);
+                final_a += "</table>\u005cn";
+                {if (true) return final_a;}
       break;
     case LIST:
       jj_consume_token(LIST);
       jj_consume_token(WITH);
-      jj_consume_token(ENTERO);
+      rows = jj_consume_token(ENTERO);
       jj_consume_token(ITEMS);
+                final_a = "<ul style='square'>\u005cn";
+                for(int i = 0; i < Integer.parseInt(rows.image); i++){
+                        final_a += "\u005ct<li>Element "+i+"</li>\u005cn";
+                }
+                        final_a += "</ul>\u005cn";
+                {if (true) return final_a;}
       break;
     case SIDEBAR:
       jj_consume_token(SIDEBAR);
       jj_consume_token(WITH);
       jj_consume_token(BA);
-      AttributesForBar();
+      rows = jj_consume_token(ENTERO);
+      jj_consume_token(ITEMS);
+      jj_consume_token(WITH);
+      jj_consume_token(STYLE);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case SMALLBLOCK:
+        style = jj_consume_token(SMALLBLOCK);
+        break;
+      case MEDIUMBLOCK:
+        style = jj_consume_token(MEDIUMBLOCK);
+        break;
+      case LARGEBLOCK:
+        style = jj_consume_token(LARGEBLOCK);
+        break;
+      default:
+        jj_la1[6] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       jj_consume_token(CA);
       label_4:
       while (true) {
-        jj_consume_token(ID);
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-        case ID:
+        case PA:
           ;
           break;
         default:
-          jj_la1[8] = jj_gen;
+          jj_la1[7] = jj_gen;
           break label_4;
         }
+        jj_consume_token(PA);
+        label_5:
+        while (true) {
+          columns = jj_consume_token(ID);
+                side_acum2 = columns.image;
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case ID:
+            ;
+            break;
+          default:
+            jj_la1[8] = jj_gen;
+            break label_5;
+          }
+        }
+        jj_consume_token(PC);
       }
       jj_consume_token(CC);
       jj_consume_token(BC);
+                        if(style.image == "smallBlock"){
+                        block_size = 20;
+                }
+                else if (style.image == "mediumBlock"){block_size = 30;}
+                else if (style.image == "largeBlock"){block_size = 35;}
+                else {block_size = 20;}
+                        for (int i = 0;i < Integer.parseInt(rows.image); i++ ){
+                                side_acum += "<aside style='height:"+block_size+"px;padding:10px;background-color:black;color:white;' id='"+(i+1)+"'>"+side_acum2+"</aside>\u005cn";
+                        }
+                        final_a = "<section class='classSideBar' id='idSideBar'>\u005cn";
+                        final_a += "\u005ct<div id='sidebar' class='smallBlocks' style='float:right;'>\u005cn";
+                        final_a += side_acum;
+                        final_a += "\u005ct</div>\u005cn";
+                        final_a += "</section>\u005cn";
+                        //System.out.println(final_a);
+                        {if (true) return final_a;}
       break;
     case NAV:
       jj_consume_token(NAV);
       jj_consume_token(WITH);
       jj_consume_token(BA);
-      AttributesForBar();
+      rows = jj_consume_token(ENTERO);
+      jj_consume_token(ITEMS);
+      jj_consume_token(WITH);
+      jj_consume_token(STYLE);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case SMALLBLOCK:
+        style = jj_consume_token(SMALLBLOCK);
+        break;
+      case MEDIUMBLOCK:
+        style = jj_consume_token(MEDIUMBLOCK);
+        break;
+      case LARGEBLOCK:
+        style = jj_consume_token(LARGEBLOCK);
+        break;
+      default:
+        jj_la1[9] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       jj_consume_token(BC);
       break;
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[10] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+                if(style.image == "smallBlock"){
+                        block_size = 20;
+                }
+                else if (style.image == "mediumBlock"){block_size = 30;}
+                else if (style.image == "largeBlock"){block_size = 35;}
+                else {block_size = 20;}
+                final_a += "<nav>";
+                for(int i = 0;i < Integer.parseInt(rows.image);i++)
+                {
+                        final_a += "\u005ct<a href='#"+(i+1)+"'>Menu "+(i+1)+"</a>\u005cn";
+                }
+                        final_a += "</nav>\u005cn";
+
+                        //System.out.println(final_a);
+        {if (true) return final_a;}
+    throw new Error("Missing return statement in function");
   }
 
-  static final public String TableContent() throws ParseException {
-        String acum = "<table style='width:100%'>";
+  static final public String TableContent(int columns) throws ParseException {
+        String acum = "";
         Token content;
-    label_5:
+        int j = 0;
+    label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PA:
         ;
         break;
       default:
-        jj_la1[10] = jj_gen;
-        break label_5;
+        jj_la1[11] = jj_gen;
+        break label_6;
       }
       jj_consume_token(PA);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case ID:
-        label_6:
-        while (true) {
-          content = jj_consume_token(ID);
-                               acum += "<td>" + content.image + "</td>\u005cn";
-          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-          case ID:
-            ;
-            break;
-          default:
-            jj_la1[11] = jj_gen;
-            break label_6;
-          }
-        }
+        content = jj_consume_token(ID);
+                if(j == 0){acum+="<tr>\u005cn";}
+                acum += "\u005ct\u005ct<td>" + content.image + "</td>\u005cn";
+                j++;
+                //System.out.println(j);
+
+
+
+
+                if(j == columns)
+                {
+                        j=0;
+                        acum += "</tr>\u005cn";
+                }
         break;
       case ENTERO:
         content = jj_consume_token(ENTERO);
-                              acum += "<td>" + content.image + "</td>\u005cn";
+                acum += "\u005ct\u005ct<td>" + content.image + "</td>\u005cn";
+                j++;
+                //System.out.println(j);
+                if(j == columns)
+                {
+                        j=0;
+                        acum += "</tr>\u005cn";
+                }
         break;
       default:
         jj_la1[12] = jj_gen;
@@ -383,32 +448,8 @@ public class PF implements PFConstants {
       }
       jj_consume_token(PC);
     }
-  }
-
-  static final public void AttributesForBar() throws ParseException {
-    jj_consume_token(ENTERO);
-    jj_consume_token(ITEMS);
-    jj_consume_token(WITH);
-    jj_consume_token(STYLE);
-    BarStyle();
-  }
-
-  static final public void BarStyle() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case SMALLBLOCK:
-      jj_consume_token(SMALLBLOCK);
-      break;
-    case MEDIUMBLOCK:
-      jj_consume_token(MEDIUMBLOCK);
-      break;
-    case LARGEBLOCK:
-      jj_consume_token(LARGEBLOCK);
-      break;
-    default:
-      jj_la1[13] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
+        {if (true) return acum;}
+    throw new Error("Missing return statement in function");
   }
 
   static final public String MediaStructures() throws ParseException {
@@ -440,7 +481,7 @@ public class PF implements PFConstants {
       jj_consume_token(BC);
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[13] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -471,7 +512,7 @@ public class PF implements PFConstants {
       format = jj_consume_token(MP4);
       break;
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[14] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -503,7 +544,7 @@ public class PF implements PFConstants {
       format = jj_consume_token(WAV);
       break;
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[15] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -529,7 +570,7 @@ public class PF implements PFConstants {
       format = jj_consume_token(PNG);
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[16] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -558,7 +599,7 @@ public class PF implements PFConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[18];
+  static final private int[] jj_la1 = new int[17];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -566,10 +607,10 @@ public class PF implements PFConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0xef900000,0x0,0x0,0x8000000,0x1800000,0xef900000,0xe6100000,0x0,0x86100000,0x80,0x0,0x0,0x0,0x60000000,0x0,0x0,0x0,};
+      jj_la1_0 = new int[] {0x0,0xddd00000,0xc0000000,0x0,0x1000000,0xddd00000,0x0,0x80,0x0,0x0,0x10d00000,0x80,0x0,0xc000000,0x0,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x10000000,0x600e,0xe,0x8000000,0x2000,0x0,0x600e,0x4000,0x8000000,0x0,0x0,0x8000000,0x18000000,0x700,0x4000,0x300000,0xc00000,0x3000000,};
+      jj_la1_1 = new int[] {0x2000000,0xc01,0x1,0x1000000,0x400,0xc01,0xe0,0x0,0x1000000,0xe0,0x0,0x0,0x3000000,0x800,0x60000,0x180000,0x600000,};
    }
 
   /** Constructor with InputStream. */
@@ -590,7 +631,7 @@ public class PF implements PFConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -604,7 +645,7 @@ public class PF implements PFConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -621,7 +662,7 @@ public class PF implements PFConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -631,7 +672,7 @@ public class PF implements PFConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -647,7 +688,7 @@ public class PF implements PFConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -656,7 +697,7 @@ public class PF implements PFConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 18; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 17; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -707,12 +748,12 @@ public class PF implements PFConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[62];
+    boolean[] la1tokens = new boolean[59];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 18; i++) {
+    for (int i = 0; i < 17; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -724,7 +765,7 @@ public class PF implements PFConstants {
         }
       }
     }
-    for (int i = 0; i < 62; i++) {
+    for (int i = 0; i < 59; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -43,85 +43,79 @@ public interface PFConstants {
   /** RegularExpression Id. */
   int CLASS = 21;
   /** RegularExpression Id. */
-  int HEADERS = 22;
+  int SIDEBAR = 22;
   /** RegularExpression Id. */
-  int HEADER = 23;
+  int NAV = 23;
   /** RegularExpression Id. */
-  int FOOTER = 24;
+  int DIV = 24;
   /** RegularExpression Id. */
-  int SIDEBAR = 25;
+  int ITEMS = 25;
   /** RegularExpression Id. */
-  int NAV = 26;
+  int AUDIO = 26;
   /** RegularExpression Id. */
-  int DIV = 27;
+  int VIDEO = 27;
   /** RegularExpression Id. */
-  int ITEMS = 28;
+  int LIST = 28;
   /** RegularExpression Id. */
-  int AUDIO = 29;
+  int LINK = 29;
   /** RegularExpression Id. */
-  int VIDEO = 30;
+  int PARAGRAPH = 30;
   /** RegularExpression Id. */
-  int LIST = 31;
+  int TITLE = 31;
   /** RegularExpression Id. */
-  int LINK = 32;
+  int SUBTITLE = 32;
   /** RegularExpression Id. */
-  int PARAGRAPH = 33;
+  int AND = 33;
   /** RegularExpression Id. */
-  int TITLE = 34;
+  int COLUMNS = 34;
   /** RegularExpression Id. */
-  int SUBTITLE = 35;
+  int ROWS = 35;
   /** RegularExpression Id. */
-  int AND = 36;
+  int STYLE = 36;
   /** RegularExpression Id. */
-  int COLUMNS = 37;
+  int SMALLBLOCK = 37;
   /** RegularExpression Id. */
-  int ROWS = 38;
+  int MEDIUMBLOCK = 38;
   /** RegularExpression Id. */
-  int STYLE = 39;
+  int LARGEBLOCK = 39;
   /** RegularExpression Id. */
-  int SMALLBLOCK = 40;
+  int YES = 40;
   /** RegularExpression Id. */
-  int MEDIUMBLOCK = 41;
+  int NO = 41;
   /** RegularExpression Id. */
-  int LARGEBLOCK = 42;
+  int SECTION = 42;
   /** RegularExpression Id. */
-  int YES = 43;
+  int IMAGE = 43;
   /** RegularExpression Id. */
-  int NO = 44;
+  int SOURCE = 44;
   /** RegularExpression Id. */
-  int SECTION = 45;
+  int WIDTH = 45;
   /** RegularExpression Id. */
-  int IMAGE = 46;
+  int PX = 46;
   /** RegularExpression Id. */
-  int SOURCE = 47;
+  int TIMES = 47;
   /** RegularExpression Id. */
-  int WIDTH = 48;
+  int HEIGHT = 48;
   /** RegularExpression Id. */
-  int PX = 49;
+  int MOV = 49;
   /** RegularExpression Id. */
-  int TIMES = 50;
+  int MP4 = 50;
   /** RegularExpression Id. */
-  int HEIGHT = 51;
+  int MP3 = 51;
   /** RegularExpression Id. */
-  int MOV = 52;
+  int WAV = 52;
   /** RegularExpression Id. */
-  int MP4 = 53;
+  int JPG = 53;
   /** RegularExpression Id. */
-  int MP3 = 54;
+  int PNG = 54;
   /** RegularExpression Id. */
-  int WAV = 55;
+  int IDG = 55;
   /** RegularExpression Id. */
-  int JPG = 56;
+  int ID = 56;
   /** RegularExpression Id. */
-  int PNG = 57;
+  int ENTERO = 57;
   /** RegularExpression Id. */
-  int IDG = 58;
-  /** RegularExpression Id. */
-  int ID = 59;
-  /** RegularExpression Id. */
-  int ENTERO = 60;
-  /** RegularExpression Id. */
-  int REAL = 61;
+  int REAL = 58;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -150,9 +144,6 @@ public interface PFConstants {
     "\"with\"",
     "\"table\"",
     "\"class\"",
-    "\"headers\"",
-    "\"header\"",
-    "\"footer\"",
     "\"sidebar\"",
     "\"nav\"",
     "\"div\"",

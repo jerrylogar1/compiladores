@@ -31,15 +31,25 @@ video{
 	height = 240px
 } with class=test and id=text; 
 with class = test and id = text;
-
+list with 3 items;
+sidebar with {3 items with style smallBlock
+[
+	(element1)(element2)(element3)
+]
+};
+nav with{ 3 items with style mediumBlock
+	
+};
 table with{
-(4 columns and 4 rows)
+(4 columns and 5 rows)
 [
 (nombre)(vaso)(plato)(botella)
 (ids) (1) (2) (3) 
 (costo) (100) (150) (300) 
 (inventario) (10) (7) (3)
+(x)(1)(2)(3)
 ]
-} ;
+}; 4 times
+
 
 }
