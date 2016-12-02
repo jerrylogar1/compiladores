@@ -108,6 +108,7 @@ public class PF implements PFConstants {
         Token text_type;
         Token description;
         String acum_desc = "";
+        String sewe = "";
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case AUDIO:
     case VIDEO:
@@ -178,9 +179,9 @@ public class PF implements PFConstants {
     case SIDEBAR:
     case NAV:
     case LIST:
-      StructureElementsWithElements();
+      sewe = StructureElementsWithElements();
       jj_consume_token(PCOMA);
-                curr = "St";
+                curr = sewe;
                 {if (true) return curr;}
       break;
     case DIV:
@@ -280,7 +281,8 @@ public class PF implements PFConstants {
     }
   }
 
-  static final public void StructureElementsWithElements() throws ParseException {
+  static final public String StructureElementsWithElements() throws ParseException {
+        String curr = "";
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case TABLE:
       jj_consume_token(TABLE);
@@ -294,7 +296,8 @@ public class PF implements PFConstants {
       jj_consume_token(ROWS);
       jj_consume_token(PC);
       jj_consume_token(CA);
-      TableContent();
+      curr = TableContent();
+                                                                                                           System.out.println(curr);
       jj_consume_token(CC);
       jj_consume_token(BC);
       break;
@@ -339,7 +342,9 @@ public class PF implements PFConstants {
     }
   }
 
-  static final public void TableContent() throws ParseException {
+  static final public String TableContent() throws ParseException {
+        String acum = "<table style='width:100%'>";
+        Token content;
     label_5:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -355,7 +360,8 @@ public class PF implements PFConstants {
       case ID:
         label_6:
         while (true) {
-          jj_consume_token(ID);
+          content = jj_consume_token(ID);
+                               acum += "<td>" + content.image + "</td>\u005cn";
           switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
           case ID:
             ;
@@ -367,7 +373,8 @@ public class PF implements PFConstants {
         }
         break;
       case ENTERO:
-        jj_consume_token(ENTERO);
+        content = jj_consume_token(ENTERO);
+                              acum += "<td>" + content.image + "</td>\u005cn";
         break;
       default:
         jj_la1[12] = jj_gen;

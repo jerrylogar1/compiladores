@@ -144,6 +144,7 @@ String Content():
 	Token text_type;
 	Token description;
 	String acum_desc = "";
+	String sewe = "";
 }
 {
 	( acum = MediaStructures() <WITH> <CLASS> <EQUAL>  class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA> 
@@ -168,10 +169,10 @@ String Content():
 		else{ curr = "Error!!!!";}
 		return curr;
 	}
-	|  StructureElementsWithElements() <PCOMA>
+	|  sewe = StructureElementsWithElements() <PCOMA>
 	{
 
-		curr = "St";
+		curr = sewe;
 		return curr;
 	}
 	| (text_type = <DIV> | text_type = <SECTION>) <WITH> <CLASS> <EQUAL> class_ = <ID> <AND> <IDG> <EQUAL> name = <ID> <PCOMA>
@@ -210,28 +211,36 @@ String Content():
 
 void StAttributes():
 {
-	
 }
 {
-	
 	MediaStructures() StAttributes(){}
 	| StructureElementsWithElements() StAttributes(){}
 	| {}
 }
-void StructureElementsWithElements():
-{}
+
+
+String StructureElementsWithElements():
 {
-	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> <ENTERO> <ROWS> <PC> <CA> TableContent() <CC> <BC>
+	String curr = "";
+}
+{
+	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> <ENTERO> <ROWS> <PC> <CA> curr = TableContent(){System.out.println(curr);} <CC> <BC>
 	| <LIST> <WITH> <ENTERO> <ITEMS>
 	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> (<ID>)+ <CC> <BC>
-	| <NAV> <WITH> <BA> AttributesForBar() <BC>)
+	| <NAV> <WITH> <BA> AttributesForBar() <BC>) 
+	return "si";
 }
 
 
-void TableContent():
-{}
+String TableContent():
 {
-	(<PA> ((<ID>)+ | <ENTERO>) <PC>)*
+	String acum = "<table style='width:100%'>";
+	Token content;
+}
+{
+	(<PA> ((content = <ID>{acum += "<td>" + content.image + "</td>\n";})+ 
+	| (content = <ENTERO>{acum += "<td>" + content.image + "</td>\n";}) ) <PC>)*
+
 }
 
 void AttributesForBar():
