@@ -222,13 +222,15 @@ void StAttributes():
 String StructureElementsWithElements():
 {
 	String curr = "";
+	String a = "si";
 }
 {
-	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> <ENTERO> <ROWS> <PC> <CA> curr = TableContent(){System.out.println(curr);} <CC> <BC>
-	| <LIST> <WITH> <ENTERO> <ITEMS>
-	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> (<ID>)+ <CC> <BC>
-	| <NAV> <WITH> <BA> AttributesForBar() <BC>) 
-	return "si";
+	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> <ENTERO> <ROWS> <PC> <CA> curr = TableContent(){System.out.println(curr);} <CC> <BC>{return a;}
+	| <LIST> <WITH> <ENTERO> <ITEMS> {return a;}
+	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> (<ID>)+ <CC> <BC>{return a;}
+	| <NAV> <WITH> <BA> AttributesForBar() <BC>) {return a;}
+
+	
 }
 
 
