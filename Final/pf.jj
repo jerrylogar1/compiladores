@@ -210,11 +210,11 @@ String Content():
 
 
 void StAttributes():
-{
+{ String x;
 }
 {
 	MediaStructures() StAttributes(){}
-	| StructureElementsWithElements() StAttributes(){}
+	| x = StructureElementsWithElements() StAttributes(){}
 	| {}
 }
 
@@ -240,8 +240,8 @@ String TableContent():
 	Token content;
 }
 {
-	(<PA> ((content = <ID>{acum += "<td>" + content.image + "</td>\n";})+ 
-	| (content = <ENTERO>{acum += "<td>" + content.image + "</td>\n";}) ) <PC>)*
+	(<PA> ((content = <ID>{acum += "<td>" + content.image + "</td>\n";})+ {return acum;}
+	| (content = <ENTERO>{acum += "<td>" + content.image + "</td>\n";}) ) <PC>)* {return acum;}
 
 }
 
