@@ -52,9 +52,6 @@ TOKEN :
 	| < WITH : "with" >
 	| < TABLE : "table" >
 	| < CLASS : "class" >
-	| < HEADERS : "headers" >
-	| < HEADER : "header" >
-	| < FOOTER : "footer" >
 	| < SIDEBAR : "sidebar" >
 	| < NAV : "nav" >
 	| < DIV : "div" >
@@ -190,21 +187,7 @@ String Content():
 		
 		return curr;
 	}
-	| (text_type = <HEADER> |text_type =  <FOOTER>) <BA>  StAttributes() <BC> <PCOMA>)
-	{
-		if(text_type.image == "header"){
-			curr = "<header>";
-		}
-		else if (text_type.image == "footer")
-		{
-			curr = "<footer>";
-		}
-		else{
-			curr = "Error!!!!";
-		}
-		return curr;
-	}
-
+	)
 	
 }
 
@@ -222,10 +205,19 @@ void StAttributes():
 String StructureElementsWithElements():
 {
 	String curr = "";
+	String final_a;
 	String a = "si";
+	Token number;
 }
 {
-	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> <ENTERO> <ROWS> <PC> <CA> curr = TableContent(){System.out.println(curr);} <CC> <BC>{return a;}
+	(<TABLE> <WITH> <BA> <PA> <ENTERO> <COLUMNS> <AND> number = <ENTERO> <ROWS> <PC> <CA> curr = TableContent(){System.out.println(curr);} <CC> <BC>
+	{
+		
+		for (int i = 0;i<Integer.parseInt(number.image);i++){
+			final_a = curr;
+		}
+		return a;
+	} 
 	| <LIST> <WITH> <ENTERO> <ITEMS> {return a;}
 	| <SIDEBAR> <WITH> <BA> AttributesForBar() <CA> (<ID>)+ <CC> <BC>{return a;}
 	| <NAV> <WITH> <BA> AttributesForBar() <BC>) {return a;}
@@ -248,13 +240,9 @@ String TableContent():
 void AttributesForBar():
 {}
 {
-	<ENTERO> <ITEMS> <WITH> <STYLE> BarStyle()
+	<ENTERO> <ITEMS> <WITH> <STYLE> (<SMALLBLOCK> | <MEDIUMBLOCK> | <LARGEBLOCK>)
 }
-void BarStyle():
-{}
-{
-	(<SMALLBLOCK> | <MEDIUMBLOCK> | <LARGEBLOCK>)
-}
+
 
 
 String MediaStructures():
