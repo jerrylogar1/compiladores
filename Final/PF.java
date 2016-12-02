@@ -61,6 +61,7 @@ public class PF implements PFConstants {
       temp = Content();
                 if(p == 0){
                         current_string += temp;
+                        current_string += "</br></br>";
                 }
       label_2:
       while (true) {
@@ -76,6 +77,7 @@ public class PF implements PFConstants {
                         p = Integer.parseInt(times.image);
                         for(int i = 0; i < p-1; i++){
                                 current_string += temp;
+                                current_string += "</br></br>";
                         }
         jj_consume_token(TIMES);
       }
@@ -389,7 +391,7 @@ public class PF implements PFConstants {
                 final_a += "<nav>";
                 for(int i = 0;i < Integer.parseInt(rows.image);i++)
                 {
-                        final_a += "\u005ct<a href='#"+(i+1)+"'>Menu "+(i+1)+"</a>\u005cn";
+                        final_a += "\u005ct<a href='#"+(i+1)+"' style='width:"+block_size+"px;padding:10px;'>Menu "+(i+1)+"</a>\u005cn";
                 }
                         final_a += "</nav>\u005cn";
 

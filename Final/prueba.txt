@@ -37,7 +37,7 @@ sidebar with {3 items with style smallBlock
 	(element1)(element2)(element3)
 ]
 };
-nav with{ 3 items with style mediumBlock
+nav with{ 3 items with style smallBlock
 	
 };
 table with{
